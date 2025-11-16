@@ -1,45 +1,33 @@
 #!/usr/bin/env bash
-# Script to manage a dummy background process
+# Script to manage the manage_my_process daemon
 
 PID_FILE="/var/run/my_process.pid"
-
-start_process() {
-    echo "manage_my_process started"
-    sleep 1000 &
-    echo $! > "$PID_FILE"
-}
-
-stop_process() {
-    echo "manage_my_process stopped"
-    if [ -f "$PID_FILE" ]; then
-        kill "$(cat "$PID_FILE")" 2>/dev/null
-        rm -f "$PID_FILE"
-    fi
-}
-
-restart_process() {
-    echo "manage_my_process restarted"
-    stop_process
-    start_process
-}
-
-if [ $# -ne 1 ]; then
-    echo "Usage: manage_my_process {start|stop|restart}"
-    exit 1
-fi
+PROCESS="./manage_my_process"
 
 case "$1" in
     start)
-        start_process
+        $PROCESS &
+        echo $! > "$PID_FILE"
+        echo "manage_my_process started"
         ;;
     stop)
-        stop_process
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")"
+            rm -f "$PID_FILE"
+        fi
+        echo "manage_my_process stopped"
         ;;
     restart)
-        restart_process
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")"
+            rm -f "$PID_FILE"
+        fi
+        $PROCESS &
+        echo $! > "$PID_FILE"
+        echo "manage_my_process restarted"
         ;;
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
-        exit 1
         ;;
 esac
+
