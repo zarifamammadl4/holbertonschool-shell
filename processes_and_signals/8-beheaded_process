@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Kill the 7-highlander process
-# shellcheck disable=SC2009
-PID=$(ps -ef | grep "7-highlander" | grep -v grep | awk "{print \$2}")
-kill "$PID"
+# Script that kills the process 7-highlander
 
+pkill -f 7-highlander
