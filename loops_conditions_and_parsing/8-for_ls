@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
-# List files, cut name after first dash
+# Display filenames after first dash
 
-for file in *
-do
-    # Skip if it doesn't contain a dash
-    if echo "$file" | grep -q "-"; then
-        echo "$file" | cut -d '-' -f 2-
-    else
-        # If no dash exists, print the full name
-        echo "$file"
-    fi
+for file in *; do
+    # Skip if not a regular file
+    [ -f "$file" ] || continue
+
+    case "$file" in
+        *-*)
+            echo "${file#*-}"
+            ;;
+        *)
+            echo "$file"
+            ;;
+    esac
 done
+
