@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Script that writes "I am alive!" indefinitely
+# Writes "I am alive!" every 2 seconds
 
 while true
 do
     echo "I am alive!" >> /tmp/my_process
     sleep 2
 done
+
