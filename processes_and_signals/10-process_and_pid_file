@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# Script handles PID file, signals and infinite loop
+# Script that creates a PID file, loops forever, reacts to signals
 
 PID_FILE="/var/run/myscript.pid"
+
+# PID faylını yarat
 echo $$ > "$PID_FILE"
 
-trap "echo I hate the kill command" SIGTERM
-trap "echo Y U no love me?!" SIGINT
+# SIGTERM — mesaj göstər və çıx
+trap 'echo "I hate the kill command"' SIGTERM
+
+# SIGINT — ctrl+c zamanı
+trap 'echo "Y U no love me?!"' SIGINT
+
+# SIGQUIT və SIGTERM — faylı sil və çıx
 trap 'rm -f "$PID_FILE"; exit' SIGQUIT
 trap 'rm -f "$PID_FILE"; exit' SIGTERM
 
+# Sonsuz loop
 while true
 do
     echo "To infinity and beyond"
-    sleep 2
+    sleep 1
 done
-
